@@ -15,7 +15,7 @@
 
     #- load envs containing data we need
     #-----------------------------------
-    prefix       <- system.file("extdata", package = "aenmd_data_ensdb_v105")
+    prefix       <- system.file("extdata", package = "aenmd.data.ensdb.v105")
 
     ._EA_exn_env <<- future::future({readRDS(paste0(prefix,'/','env_ensdb_v105_exns_byTx_fil.rds'))}, lazy = TRUE)
     #environment(._EA_exn_env) <- asNamespace('aenmd')
