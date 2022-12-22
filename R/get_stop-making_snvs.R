@@ -15,7 +15,7 @@ if( ( file.exists(paste(prefix, datfiles, sep="/")) |> all() ) && (!FORCE_CREATE
 } else { #- generate data.
 
 Hsapiens <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens
-seqlevelsStyle(Hsapiens) <- 'NCBI'
+GenomeInfoDb::seqlevelsStyle(Hsapiens) <- 'NCBI'
 
 #- collect futures b/c we parallelize later on.
 #. might want to get rid of fturures; they are also slow.
@@ -122,10 +122,26 @@ our_tx_ids <- ._EA_txs_grl$tx_id
 tictoc::tic()
 tmp <- pbapply::pblapply(our_tx_ids, function(x) get_stop_making_snvs(x))
 tictoc::toc()
+names(tmp) <- our_tx_ids
+
+#- we want to save a keys -> TX_IDs mapping, so we need to invert the list
+#  since we only can't have vectors as values we do key -> ENST...|ENST...|ENST...
+tmp_r  <- Biobase::reverseSplit(tmp)
+tmp_r2 <- lapply(tmp_r, stringr::str_c, collapse="|")
+tmp_r2 <- tmp_r2 |> unlist()
+m_keys <- names(tmp_r2)
+m_vals <- tmp_r2
+rm(tmp_r2)
+m_trie <- triebeard::trie(keys = m_keys, values = m_vals)
+#- since triebeard does not have serialize, we'll do it by hand:
+#  we save:
+saveRDS(m_keys, file="../inst/extdata/tri-keys_ensdb_v105_fil_all-stop-making-snvs.rds")
+saveRDS(m_vals, file="../inst/extdata/tri-vals_ensdb_v105_fil_all-stop-making-snvs.rds")
 
 #- What do we find? ~3.5 million ptc-making snvs.
-table(lapply(tmp, is.null) |> unlist())                              #- 31,302 transcripts with stp-gains
-kys <- tmp[! (lapply(tmp,is.null) |> unlist()) ] |> unlist() |> unique() #- 3,641,384 stop-gain-making
+ 
+tmp_r |> unlist() |> unique() |> length() #- 31,302 transcripts with stp-gains
+length(m_keys)                            #- 3,641,384 stop-gain-making
 
 #- check: does the reference in the key match the reference in the genome?
 #-------------------------------------------------------------------------
@@ -139,22 +155,7 @@ sta_chk <- lapply(sta_chk, "[[", 1) |> unlist()
 sta_chk <- strsplit(sta_chk,split=":")
 sta_chk <- lapply(sta_chk, "[[", 2) |> unlist()
 
-seq <- getSeq(Hsapiens, GRanges(paste0(chr_chk,":", sta_chk)))
+seq <- BSgenome::getSeq(Hsapiens, GenomicRanges::GRanges(paste0(chr_chk,":", sta_chk)))
 if(!all(as.character(seq) == ref_chk)) error("reference allele does not match genome.")
-
-#- save them in a trie to look up; (works faster than hash, did a benchmark)
-
-m_keys <- kys
-m_vals <- rep(TRUE, length(m_keys)) #- dummy value - could use rules in second step.
-m_trie <- triebeard::trie(keys = m_keys, values = m_vals)
-
-#- since triebeard does not have serialize, we'll do it by hand:
-#  we save:
-saveRDS(m_keys, file="../inst/extdata/tri-keys_ensdb_v105_fil_all-stop-making-snvs.rds")
-saveRDS(m_vals, file="../inst/extdata/tri-vals_ensdb_v105_fil_all-stop-making-snvs.rds")
-#  and read in by hand:
-#m_keys <- readRDS(file="./inst/extdata/tri-keys_ensdb_v105_fil_all-stop-making-snvs.rds")
-#m_vals <- readRDS(file="./inst/extdata/tri-vals_ensdb_v105_fil_all-stop-making-snvs.rds")
-#m_trie <- triebeard::trie(keys = m_keys, values = m_vals)
 
 } #- end else
