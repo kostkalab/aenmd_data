@@ -46,4 +46,78 @@
     #environment(._EA_snv_tri) <- asNamespace('aenmd')
 }
 
+#' Exons (coding DNA) of all the transcripts in this package's transcript set
+#'
+#' @name EA_exn_env
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details Environment, with transcript names as keys and exons (as \code{GenomicRanges::GRanges}) as values.
+NULL
 
+#' DNA sequence (codong) of all the transcripts in this package's transcript set
+#'
+#' @name EA_cds_env
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details Envirnonment, with transcript names as keys, and DNA sequence (as \code{Biostrings::DNAString}) as values.
+NULL
+
+#' Splice regions of all the transcripts in this package's transcript set
+#'
+#' @name EA_spl_env
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details Envirnonment, with transcript names as keys, and splice regions (as \code{GenomicRanges::GRangesList}) as values.
+#' Splice regions extend 3bp into the exon and 8bp into the intron.
+NULL
+
+#' Single exon transcripts contained in this package's transcript set
+#'
+#' @name EA_set_env
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details Envirnonment, with transcript names *of single exon transcripts only* as keys, and \code{TRUE} as values.
+NULL
+
+#' Splice regions of all the transcripts in this package's transcript set
+#'
+#' @name EA_spl_grl
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details Splice regions of all transcripts, as \code{GenomicRanges::GRangesList}.
+NULL
+
+#' Exons (coding DNA only) of all the transcripts in this package's transcript set
+#'
+#' @name EA_exn_grl
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details Exons of all transcripts, as \code{GenomicRanges::GRangesList}.
+NULL
+
+#' Transcripts in package's transcript set
+#'
+#' @name EA_txs_grl
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details All transcripts in this package's transcript list as \code{GenomicRanges::GRangesList}.
+NULL
+
+#' Keys and values containing all STOP-generating SNVs in this package's transcript  set
+#'
+#' @name EA_snv_tri
+#' @docType data
+#' @author Dennis Kostka
+#' @keywords data
+#' @details A \code{triebeard::trie}. Contains the keys for all SNVs that generate 
+#' stop codons. The key format is \code{chr:start}, where start is a zero-padded 9-digit number.
+#' The values are strings, each string contains all ensembl transcript ids for which the SNV 
+#' causes a stop. Transcript ids in the string are separated by the "|" character.
+NULL
