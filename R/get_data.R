@@ -22,7 +22,7 @@ if((file.exists(paste(prefix, datfiles, sep="/")) |> all()) && (!FORCE_CREATE)){
 
 } else { #- generate data.
 
-Hsapiens <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens
+Hsapiens <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens #- BSgenome.Hsapiens.UCSC.hg38_1.4.4
 seqlevelsStyle(Hsapiens) <- 'NCBI'
 genome(Hsapiens) <- 'GRCh38' #- ugly, but otherwise the ensdbmerge down there does not work.
                               #- also pretty sure this is corredt in that the ensembl annoations are  are also a newer patch 
@@ -37,14 +37,16 @@ edb  <- ah[[AH_VERSION]]
 #------------------------
 
 #- all protein-coding txs on standard chromosomes
-FilterList <- list(     ensembldb::SeqNameFilter(as.character(c(1:22,"X","Y","MT"))),
-                        ensembldb::TxBiotypeFilter("protein_coding"))
-txs <- ensembldb::transcripts(edb, filter = FilterList,
+flt_chr <- AnnotationFilter::SeqNameFilter(as.character(c(1:22,"X","Y","MT")))
+flt_tbt <- AnnotationFilter::TxBiotypeFilter("protein_coding")
+flt_lst <- AnnotationFilter::AnnotationFilterList(flt_chr, flt_tbt, logicOp = "&")
+
+txs <- ensembldb::transcripts(edb, filter = flt_lst,
                                columns = c( "tx_id_version","gene_id", "tx_support_level", "tx_is_canonical"))
 
 #- corresponding exon ranges
-all_exn_rng        <- ensembldb::cdsBy(edb, "tx", filter = ensembldb::TxIdFilter(names(txs)))   #- cds only
-all_tx_exn_rng     <- ensembldb::exonsBy(edb, "tx", filter = ensembldb::TxIdFilter(names(txs))) #- whole transcript
+all_exn_rng        <- ensembldb::cdsBy(edb, "tx", filter = AnnotationFilter::TxIdFilter(names(txs)))   #- cds only
+all_tx_exn_rng     <- ensembldb::exonsBy(edb, "tx", filter = AnnotationFilter::TxIdFilter(names(txs))) #- whole transcript
 #- these are exactly the same transcripts
 if(! all(names(all_exn_rng) == names(all_tx_exn_rng)) ) stop("Transcripts naming issue")
 txs                <- txs[names(all_exn_rng),]
@@ -67,8 +69,8 @@ cds_used     <- BSgenome::getSeq(Hsapiens, exn_rng_used)
 #  in this case the cds is not divisible by three.
 #  we will exclude these but keep track.
 out <- which(width(exn_rng_used) |> lapply(sum) |> unlist() %% 3 != 0) |> sort()
-# length(out)
-# 927
+length(out)
+# 859
 write.table(names(out) |> sort(), file="../inst/extdata/enst_length_excluded.txt",
             quote = FALSE, row.names = FALSE, col.names = FALSE)
 txs_used     <- txs_used[ -out  ]
@@ -82,26 +84,28 @@ cds_used     <- cds_used[ -out  ]
 #  3bp into the exon and 8bp into the intron;
 
 #- exons (with utrs) ; but for ANY protein-coding transcript on standard chromosomes
-ex   <- ensembldb::exonsBy(edb, "tx", filter = FilterList, columns = c("exon_id", "tx_name"))
+ex   <- ensembldb::exonsBy(edb, "tx", filter = flt_lst, columns = c("exon_id", "tx_name"))
 ex_s <- resize(ex, width=3, fix = "start")
 ex_e <- resize(ex, width=3, fix = "end")
 sr_s <- resize(ex_s, width = 11, fix = "end")
 sr_e <- resize(ex_e, width = 11, fix = "start")
-exn_spl_rng <-  pc(sr_s,sr_e)  %>% sort()
+exn_spl_rng <-  pc(sr_s,sr_e) |> sort()
 
 #- aggregate for all txs_used ALL overlapping splice regions
+#  This is not strictly necessary, could actually just filter 
+#  based on all the splice regions above...
 ov <- GenomicRanges::findOverlaps(txs_used, exn_spl_rng)
 
 afu <- function(ind){
 	#tx_nme                <- names(txs_used)[ind]
-    sh                    <- GenomicRanges::subjectHits(ov)[which(GenomicRanges::queryHits(ov)==ind)]
-	res                   <- exn_spl_rng[sh] %>% unlist() %>% sort()
+    sh                    <- S4Vectors::subjectHits(ov)[which(S4Vectors::queryHits(ov)==ind)]
+	res                   <- exn_spl_rng[sh] |> unlist() |> sort()
 	mcols(res)$tx_biotype <- NULL
 	return(res)
 }
 
 #- FIXME: slow, there needs to be a better way.
-spl_rng_used        <- sapply(seq_len(length(txs_used)), afu) %>% GenomicRanges::GRangesList()
+spl_rng_used        <- sapply(seq_len(length(txs_used)), afu) |> GenomicRanges::GRangesList()
 names(spl_rng_used) <- names(txs_used)
 
 #- NOTE
