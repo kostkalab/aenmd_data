@@ -42,7 +42,7 @@
         m_keys <- readRDS(paste0(prefix,'/','tri-keys_ensdb_v105_fil_all-stop-making-snvs.rds'))
         m_vals <- readRDS(paste0(prefix,'/','tri-vals_ensdb_v105_fil_all-stop-making-snvs.rds'))
         m_trie <- triebeard::trie(keys = m_keys, values = m_vals)},
-        lazy = TRUE)
+        lazy = TRUE, seed = TRUE)
     #environment(._EA_snv_tri) <- asNamespace('aenmd')
 }
 
