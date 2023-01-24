@@ -7,5 +7,5 @@ pipelines:
           enabled: false
         script:
           - git clone --bare git@bitbucket.org:dkostka/aenmd_data.git
-          - cd RepoName.git
+          - cd aenmd_data.git
           - git push --mirror git@github.com:kostkalab/aenmd_data.git
