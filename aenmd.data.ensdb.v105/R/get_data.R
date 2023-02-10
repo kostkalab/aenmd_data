@@ -28,10 +28,10 @@ genome(Hsapiens) <- 'GRCh38' #- ugly, but otherwise the ensdbmerge down there do
                               #- also pretty sure this is corredt in that the ensembl annoations are  are also a newer patch 
 
 AH_VERSION <- 'AH98047'
-
 #- Get the data
 ah   <- AnnotationHub::AnnotationHub()
 edb  <- ah[[AH_VERSION]]
+
 
 #- COMPILE TRANSCRIPT SET
 #------------------------
