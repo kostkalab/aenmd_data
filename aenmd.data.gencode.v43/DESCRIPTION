@@ -1,7 +1,7 @@
 Package: aenmd.data.gencode.v43
 Type: Package
 Title: Data package for the aenmd package, based on GENCODE version 43
-Version: 0.0.1
+Version: 0.0.2
 Author: Dennis Kostka
 Maintainer: Dennis Kostka <kostka@pitt.edu>
 Description: Annotation of genetic variants with predicted escape from nonsene mediated decay (NMD) is performed by the aenmd package. This package contains processed transcript information based on GENCODE version 43.

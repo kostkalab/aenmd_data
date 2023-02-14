@@ -58,6 +58,10 @@ GenomeInfoDb::genome(txdb) <- ""
 GenomeInfoDb::seqlevelsStyle(txdb) <- 'NCBI'
 GenomeInfoDb::genome(txdb) <- "GRCh38"
 
+GenomeInfoDb::genome(ALLgtf) <- ""
+GenomeInfoDb::seqlevelsStyle(ALLgtf) <- 'NCBI'
+GenomeInfoDb::genome(ALLgtf) <- "GRCh38"
+
 #- collect transcripts with coding sequence
 #==========================================
 txs <- GenomicFeatures::transcripts(txdb,
@@ -125,6 +129,9 @@ TX_INFO$num_exons <- num_exns[names(TX_INFO)] |> as.integer()
 #- convert transcript support level to integer
 #---------------------------------------------
 TX_INFO$transcript_support_level <- TX_INFO$transcript_support_level |> as.integer()
+
+#- add genome info
+GenomeInfoDb::seqinfo(TX_INFO) <- GenomeInfoDb::seqinfo(txdb)
 
 #- SAVE RESULT
 #-------------
