@@ -1,10 +1,20 @@
 ## aenmd_data
 
-This repository contains R data packages for the `aenmd` package that annotates transcripts with variants that cause premature termination codons from nonsense-mediated decay. These annotations depend data structures derived from transcript models, and here we provide them for different transcript annotations for the GRCh37 and GRCh38 assemblies. This makes it straight-forward to use `aenmd` with variant annotations from either assembly:
+### Data packages for the `aenmd` R package
+
+This repository contains R data packages for the `aenmd` package; `aenmd` annotates transcripts with variants that cause premature termination codons with regard to predicted escape nonsense-mediated decay (NMD). `aenmd` uses data objects derived from transcript models, and here we provide them for transcript sets for the GRCh37 and GRCh38 assemblies. This makes it straight-forward to use `aenmd` with variant annotations from either assembly.
+
+Currently, the repository contains three data packages:
+
+- `aenmd.data.ensdb.v105` High-confidence transcript set based on Ensembl version 105. High-confidence means protein-coding transcripts with transcript support level 1 (or single exon transcripts).
+
+- `aenmd.data.gencode.v43` Protein-coding transcripts from [GENCODE version 43](https://www.gencodegenes.org/human/release_43.html).
+
+- `aenmd.data.gencode.v43.grch37` Protein-coding transcripts from [GENCODE version 43, mapped to GRCh37](https://www.gencodegenes.org/human/release_43lift37.html).
 
 ***Annotating variants from GRCh37 or GRCh38 assemblies*** 
 
-```
+```R
 > library(aenmd)
 > vars_grch38 <- 
 > vars_grch37 <- 
@@ -26,9 +36,10 @@ This repository contains R data packages for the `aenmd` package that annotates 
 > vars_grch37_annotated <- 
 ```
 
-***More information***
+***Additional information***
 
-Each annotation package provide transcript information, which in turn is available via the `aenmd` package to the user. Data packages implement the functions listed below. When changing data packages, `aenmd` replaces said functions. Below, transcripts  are identified by their GENCODE/ENSEMBL transcript ID, e.g. `txname <- ENSG00000187634.13`; SNVs are identified by their locations and alleles, e.g. `snvname <- 10:000047074|C|A`. 
+Each annotation package provide transcript information, which in turn is available via the `aenmd` package to the user. Typically the functions below are used by `aenmd` internally, but users can use them to get information about `aenmd`s transcript set, and about PTC-generating SNVs. 
+Below, transcripts  are identified by their GENCODE/ENSEMBL transcript ID, e.g. `txname <- ENSG00000187634.13`; SNVs are identified by their location and alleles, e.g. `snvname <- 10:000047074|C|A`. 
 
 *Information about transcripts:*
 
@@ -41,7 +52,7 @@ Each annotation package provide transcript information, which in turn is availab
 
 *Information about PTC-generating SNVs:*
 
-* *PTC-generating SNVs.* `ad_is_ptc_snv(snvname)` Query whether a SNV generates a PTC in a transcript. Example:
+* *PTC-generating SNVs.* `ad_is_ptc_snv(snvname)` Does a SNV generate a PTC in a transcript? 
 
 
 
