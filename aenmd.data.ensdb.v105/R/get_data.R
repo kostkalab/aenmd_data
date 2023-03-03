@@ -14,7 +14,11 @@ datfiles <- c(  "env_ensdb_v105_exns_byTx_fil.rds",
                 "env_ensdb_v105_setx_byTx_fil.rds",
                 "grl_ensdb_v105_splc_byTx_fil.rds",
                 "grl_ensdb_v105_exns_byTx_fil.rds",
-                "grl_ensdb_v105_trnscrpts_fil.rds")
+                "grl_ensdb_v105_trnscrpts_fil.rds",
+                "gr_ensdb_v105_txs.rds",
+                "gr_ensdb_v105_txs-mask.rds",
+                "gr_ensdb_v105_spl-mask.rds"
+                )
 
 if((file.exists(paste(prefix, datfiles, sep="/")) |> all()) && (!FORCE_CREATE)){
     
@@ -23,9 +27,10 @@ if((file.exists(paste(prefix, datfiles, sep="/")) |> all()) && (!FORCE_CREATE)){
 } else { #- generate data.
 
 Hsapiens <- BSgenome.Hsapiens.UCSC.hg38::Hsapiens #- BSgenome.Hsapiens.UCSC.hg38_1.4.4
-seqlevelsStyle(Hsapiens) <- 'NCBI'
-genome(Hsapiens) <- 'GRCh38' #- ugly, but otherwise the ensdbmerge down there does not work.
-                              #- also pretty sure this is corredt in that the ensembl annoations are  are also a newer patch 
+GenomeInfoDb::genome(Hsapiens) <- ""
+GenomeInfoDb::seqlevelsStyle(Hsapiens) <- 'NCBI'
+GenomeInfoDb::genome(Hsapiens) <- "GRCh38"
+
 
 AH_VERSION <- 'AH98047'
 #- Get the data
@@ -148,5 +153,40 @@ if(TRUE){
     saveRDS(exn_rng_used, file = "../inst/extdata/grl_ensdb_v105_exns_byTx_fil.rds")
     saveRDS(txs_used,     file = "../inst/extdata/grl_ensdb_v105_trnscrpts_fil.rds")
 }
+
+#- make the new >= 0.3.0 objects
+#-------------------------------
+
+#- gr_ensdb_v105_txs.rds
+#- this is actually all we need
+#- make symbolic link
+R.utils::createLink(link = "../inst/extdata/gr_ensdb_v105_txs.rds", 
+                    target = "../inst/extdata/grl_ensdb_v105_trnscrpts_fil.rds")
+
+
+#- gr_ensdb_v105_txs-mask.rds
+tmp <- readRDS("../inst/extdata/grl_ensdb_v105_exns_byTx_fil.rds")
+tmp <- tmp |> unlist()
+strand(tmp)       <- '*' #- don't need strand info
+tmp$transcript_id <- names(tmp)
+tst               <- reduce(tmp, with.revmap = TRUE)
+tst_tx            <- lapply(tst$revmap, \(x) tmp$transcript_id[x])
+tst$transcript_id <- tst_tx
+tst$revmap        <- NULL #- don't need that column
+saveRDS(tst, file = "../inst/extdata/gr_ensdb_v105_txs-mask.rds")
+
+#- gr_ensdb_v105_spl-mask.rds
+tmp <- readRDS("../inst/extdata/grl_ensdb_v105_splc_byTx_fil.rds")
+tmp <- tmp |> unlist()
+strand(tmp)       <- '*' #- don't need strand info
+tst               <- reduce(tmp, with.revmap = TRUE)
+tst_tx            <- lapply(tst$revmap, \(x) tmp$tx_name[x])
+tst_ex            <- lapply(tst$revmap, \(x) tmp$exon_id[x])
+tst$transcript_id <- tst_tx
+tst$exon_id       <- tst_ex
+tst$revmap        <- NULL #- don't need that column
+saveRDS(tst, file = "../inst/extdata/gr_ensdb_v105_spl-mask.rds")
+
+
 
 } #- end else

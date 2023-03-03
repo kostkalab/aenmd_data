@@ -10,6 +10,11 @@
 ._EA_snv_tri <- NULL #- SNVs that caust stop-gains in transcripts we use
 ._EA_set_env <- NULL #- list of single exon transcripts ; TODO: make me a tri
 
+#- for the new interface (version 0.3.0 and later);
+#- we keep the above to make compatibility easier.
+._EA_txs_gr       <- NULL #- mask for all splice regions
+._EA_txs_mask_gr  <- NULL #- mask for all splice regions
+._EA_spl_mask_gr  <- NULL #- mask for all splice regions
 
 .onLoad <- function(libname, pkgname) {
 
@@ -21,29 +26,20 @@
     #environment(._EA_exn_env) <- asNamespace('aenmd')
 
     ._EA_cds_env <<- future::future({readRDS(paste0(prefix,'/','env_ensdb_v105_seqs_byTx_fil.rds'))}, lazy = TRUE)
-    #environment(._EA_cds_env) <- asNamespace('aenmd')
-
     ._EA_spl_env <<- future::future({readRDS(paste0(prefix,'/','env_ensdb_v105_splc_byTx_fil.rds'))}, lazy = TRUE)
-    #environment(._EA_spl_env) <- asNamespace('aenmd')
-
     ._EA_set_env <<- future::future({readRDS(paste0(prefix,'/','env_ensdb_v105_setx_byTx_fil.rds'))}, lazy = TRUE)
-    #environment(._EA_set_env) <- asNamespace('aenmd')
-
     ._EA_spl_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_splc_byTx_fil.rds'))}, lazy = TRUE)
-    #environment(._EA_spl_grl) <- asNamespace('aenmd')
-
     ._EA_exn_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_exns_byTx_fil.rds'))}, lazy = TRUE)
-    #environment(._EA_exn_grl) <- asNamespace('aenmd')
-
     ._EA_txs_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_trnscrpts_fil.rds'))}, lazy = TRUE)
-    #environment(._EA_txl_grl) <- asNamespace('aenmd')
-
     ._EA_snv_tri <<- future::future({
         m_keys <- readRDS(paste0(prefix,'/','tri-keys_ensdb_v105_fil_all-stop-making-snvs.rds'))
         m_vals <- readRDS(paste0(prefix,'/','tri-vals_ensdb_v105_fil_all-stop-making-snvs.rds'))
         m_trie <- triebeard::trie(keys = m_keys, values = m_vals)},
         lazy = TRUE, seed = TRUE)
-    #environment(._EA_snv_tri) <- asNamespace('aenmd')
+    #- the new 0.3.0 and later
+    ._EA_txs_gr       <<- future::future({readRDS(paste0(prefix,'/','gr_ensdb_v105_txs.rds'))}, lazy = TRUE)
+    ._EA_txs_mask_gr  <<- future::future({readRDS(paste0(prefix,'/','gr_ensdb_v105_txs-mask.rds'))}, lazy = TRUE)
+    ._EA_spl_mask_gr  <<- future::future({readRDS(paste0(prefix,'/','gr_ensdb_v105_spl-mask.rds'))}, lazy = TRUE)
 }
 
 #' Exons (coding DNA) of all the transcripts in this package's transcript set
@@ -121,3 +117,4 @@ NULL
 #' The values are strings, each string contains all ensembl transcript ids for which the SNV 
 #' causes a stop. Transcript ids in the string are separated by the "|" character.
 NULL
+
