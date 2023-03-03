@@ -23,7 +23,7 @@
     ._EA_cds_env     <<- future::future({readRDS(paste0(prefix,'/','env_gencode_v43_seqs_byTx.rds'))}, lazy = TRUE)
     ._EA_txs_gr      <<- future::future({readRDS(paste0(prefix,'/','gr_gencode_v43_txs.rds'))}, lazy = TRUE)
     ._EA_txs_mask_gr <<- future::future({readRDS(paste0(prefix,'/','gr_gencode_v43_txs-mask.rds'))}, lazy = TRUE)
-    ._EA_sel_env     <<- future::future({readRDS(paste0(prefix,'/','env_gencode_v43_sel.rds'))}, lazy = TRUE)
+    ._EA_set_env     <<- future::future({readRDS(paste0(prefix,'/','env_gencode_v43_set.rds'))}, lazy = TRUE)
     ._EA_spl_mask_gr <<- future::future({readRDS(paste0(prefix,'/','gr_gencode_v43_spl-mask.rds'))}, lazy = TRUE)
     ._EA_snv_tri     <<- future::future({
         m_keys <- readRDS(paste0(prefix,'/','tri-keys_gencode_v43_all-stop-making-snvs.rds'))

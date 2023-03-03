@@ -70,19 +70,21 @@ ad_get_cds_by_tx <- function(txname){
 #' @details Caveat: This function returns "FALSE" for single exon transcripts that are not in the transcript set.
 #' 
 ad_is_single_exn_tx <- function(txname){
-        return(exists(txname, future::value(._EA_sel_env)))
+        return(exists(txname, future::value(._EA_set_env)))
 }
 
 #' Query stop-making SNVs by transcript
 #' @param keys Character vector. SNVs to be checked.
 #' @param txname String. Transcript name. 
 #' @return Logical. For each key, whether it is PTC-generating in txname.
-is_ptc_snv <- function(keys, txname){
-    tmp <- triebeard::longest_match(future::value(._EA_snv_tri) ,keys) |>
-                  stringr::str_detect(pattern=txname) 
-    return(!is.na(tmp))
+ad_is_ptc_snv <- function(keys, txname = NULL){
+    tmp <- triebeard::longest_match(future::value(._EA_snv_tri) ,keys) 
+    if(is.na(tmp)) return(FALSE)
+    #- it causes a PTC somewhere...
+    if(is.null(txname)) return(TRUE)
+    #- decide if it causes a PTC in the queried transcript
+    tmp |>  stringr::str_detect(pattern=txname)
 }
-
 
 
 

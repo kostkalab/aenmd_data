@@ -177,7 +177,7 @@ for( i in seq_len(length(TX_INFO))){
 ###########################################################################
 saveRDS(exon_env,  file = "../inst/extdata/env_gencode_v43_exns_byTx.rds")
 saveRDS(cds_env,   file = "../inst/extdata/env_gencode_v43_seqs_byTx.rds")
-saveRDS(set_env,   file = "../inst/extdata/env_gencode_v43_sel.rds")
+saveRDS(set_env,   file = "../inst/extdata/env_gencode_v43_set.rds")
 ###########################################################################
 
 
