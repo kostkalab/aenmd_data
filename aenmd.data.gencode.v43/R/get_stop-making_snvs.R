@@ -3,12 +3,12 @@
 
 FORCE_CREATE = FALSE #- set to TRUE to overwrite existing data
 
-prefix <- here::here("inst","extdata")
+PREFIX <- paste0(rprojroot::find_root("DESCRIPTION", path="."),"/inst/extdata/")
 
 datfiles <- c(  "tri-keys_gencode_v43_all-stop-making-snvs.rds",
                 "tri-keys_gencode_v43_all-stop-making-snvs.rds")
 
-if( ( file.exists(paste(prefix, datfiles, sep="/")) |> all() ) && (!FORCE_CREATE)){
+if( ( file.exists(paste(PREFIX, datfiles, sep="/")) |> all() ) && (!FORCE_CREATE)){
     
     #- nothing to do
 
@@ -22,9 +22,9 @@ genome(si) <- "GRCh38"
 seqinfo(Hsapiens) <- si
 
 
-._EA_exn_env     <- readRDS("../inst/extdata/env_gencode_v43_exns_byTx.rds")
-._EA_cds_env     <- readRDS("../inst/extdata/env_gencode_v43_seqs_byTx.rds")
-._EA_txs_mask_gr <- readRDS("../inst/extdata/gr_gencode_v43_txs-mask.rds")
+._EA_exn_env     <- readRDS(paste0(PREFIX, "/env_gencode_v43_exns_byTx.rds"))
+._EA_cds_env     <- readRDS(paste0(PREFIX, "/env_gencode_v43_seqs_byTx.rds"))
+._EA_txs_mask_gr <- readRDS(paste0(PREFIX, "/gr_gencode_v43_txs-mask.rds"))
 
 
 get_stop_making_snvs <- function(txname, verb = FALSE){
@@ -143,8 +143,8 @@ rm(tmp_r2)
 m_trie <- triebeard::trie(keys = m_keys, values = m_vals)
 #- since triebeard does not have serialize, we'll do it by hand:
 #  we save:
-saveRDS(m_keys, file="../inst/extdata/tri-keys_gencode_v43_all-stop-making-snvs.rds")
-saveRDS(m_vals, file="../inst/extdata/tri-vals_gencode_v43_all-stop-making-snvs.rds")
+saveRDS(m_keys, file = paste0(PREFIX, "/tri-keys_gencode_v43_all-stop-making-snvs.rds"))
+saveRDS(m_vals, file = paste0(PREFIX, "/tri-vals_gencode_v43_all-stop-making-snvs.rds"))
 
 #- What do we find? ~3.5 million ptc-making snvs.
  

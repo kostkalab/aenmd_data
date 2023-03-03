@@ -2,16 +2,16 @@
 
 FORCE_CREATE = FALSE #- set to TRUE to overwrite existing data
 
-prefix <- here::here("inst","extdata")
+PREFIX <- paste0(rprojroot::find_root("DESCRIPTION", path="."),"/inst/extdata/")
 
 datfiles <- c(  "env_gencode_v43_exns_byTx.rds",
-                "env_gencode_v43_sel.rds",
+                "env_gencode_v43_set.rds",
                 "env_gencode_v43_seqs_byTx.rds",
                 "gr_gencode_v43_spl-mask.rds",
                 "gr_gencode_v43_txs-mask.rds",
                 "gr_gencode_v43_txs.rds")
 
-if((file.exists(paste(prefix, datfiles, sep="/")) |> all()) && (!FORCE_CREATE)){
+if((file.exists(paste(PREFIX, datfiles, sep="/")) |> all()) && (!FORCE_CREATE)){
     
     #- nothing to do
 
@@ -137,7 +137,7 @@ GenomeInfoDb::seqinfo(TX_INFO) <- GenomeInfoDb::seqinfo(txdb)
 #-------------
 #saveRDS(CDS_EXN_RNG_BY_TX,     file = "../inst/extdata/grl_gencode_v43_exns_byTx.rds")
 ################################################################################
-saveRDS(TX_INFO,    		   file = "../inst/extdata/gr_gencode_v43_txs.rds")
+saveRDS(TX_INFO,    		   file = paste0(PREFIX,"/gr_gencode_v43_txs.rds"))
 ################################################################################
 
 #- for each transcript, assemble its coding sequence
@@ -175,9 +175,9 @@ for( i in seq_len(length(TX_INFO))){
 #- exons we need fast, so we put them into an environment
 
 ###########################################################################
-saveRDS(exon_env,  file = "../inst/extdata/env_gencode_v43_exns_byTx.rds")
-saveRDS(cds_env,   file = "../inst/extdata/env_gencode_v43_seqs_byTx.rds")
-saveRDS(set_env,   file = "../inst/extdata/env_gencode_v43_set.rds")
+saveRDS(exon_env,  file = paste0(PREFIX, "/env_gencode_v43_exns_byTx.rds"))
+saveRDS(cds_env,   file = paste0(PREFIX, "/env_gencode_v43_seqs_byTx.rds"))
+saveRDS(set_env,   file = paste0(PREFIX, "/env_gencode_v43_set.rds"))
 ###########################################################################
 
 
@@ -227,7 +227,7 @@ tst$revmap        <- NULL #- don't need that column
 SPL_MSK <- tst
 
 ########################################################################
-saveRDS(SPL_MSK,   file = "../inst/extdata/gr_gencode_v43_spl-mask.rds")
+saveRDS(SPL_MSK,   file = paste0(PREFIX, "/gr_gencode_v43_spl-mask.rds"))
 ########################################################################
 
 }

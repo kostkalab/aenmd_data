@@ -18,6 +18,7 @@ Imports:
     GenomicRanges,
     here,
     pbapply,
+    rprojroot,
     S4Vectors,
     stringi,
     stringr,
