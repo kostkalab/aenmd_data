@@ -23,7 +23,7 @@
 ad_get_genome <- function(details = FALSE){
 #=====================
     if(details) return( GenomeInfoDb::seqinfo(ad_get_txs()))
-    return("GRCh38")
+    return("GRCh37")
 }
 
 #' Transcripts considered

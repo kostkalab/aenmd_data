@@ -12,6 +12,28 @@ Currently, the repository contains three data packages:
 
 - `aenmd.data.gencode.v43.grch37` Protein-coding transcripts from [GENCODE version 43, mapped to GRCh37](https://www.gencodegenes.org/human/release_43lift37.html).
 
+***INSTALLATION***
+
+Install packages by selecting the appropriate subdirectory from this `aenmd_data` directory.
+
+```R
+#- install ENSEMBL v105 transcripts on GRCh38
+#- use the remotes package to install
+> remotes::install_github(repo = "kostkalab/aenmd_data",
+                          subdir = "aenmd.data.ensdb.v105")
+
+#- install GENCODE v43 transcripts on GRCh38
+#- use the remotes package to install
+> remotes::install_github(repo = "kostkalab/aenmd_data",
+                          subdir = 'aenmd.data.gencode.v43')
+
+#- install GENCODE v43 transcripts on GRCh37
+#- use the remotes package to install
+> remotes::install_github(repo = "kostkalab/aenmd_data",
+                          subdir = 'aenmd.data.gencode.v43.grch37')
+
+```
+
 ***Annotating variants from GRCh37 or GRCh38 assemblies*** 
 
 ```R

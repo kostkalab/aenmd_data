@@ -17,7 +17,7 @@
 
     #- load envs containing data we need
     #-----------------------------------
-    prefix       <- system.file("extdata", package = "aenmd.data.gencode.v43")
+    prefix       <- system.file("extdata", package = "aenmd.data.gencode.v43.grch37")
 
     ._EA_exn_env     <<- future::future({readRDS(paste0(prefix,'/','env_gencode_v43_exns_byTx.rds'))}, lazy = TRUE)
     ._EA_cds_env     <<- future::future({readRDS(paste0(prefix,'/','env_gencode_v43_seqs_byTx.rds'))}, lazy = TRUE)
