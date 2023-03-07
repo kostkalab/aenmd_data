@@ -78,12 +78,16 @@ ad_is_single_exn_tx <- function(txname){
 #' @param txname String. Transcript name. 
 #' @return Logical. For each key, whether it is PTC-generating in txname.
 ad_is_ptc_snv <- function(keys, txname = NULL){
-    tmp <- triebeard::longest_match(future::value(._EA_snv_tri) ,keys) 
-    if(is.na(tmp)) return(FALSE)
-    #- it causes a PTC somewhere...
-    if(is.null(txname)) return(TRUE)
-    #- decide if it causes a PTC in the queried transcript
-    tmp |>  stringr::str_detect(pattern=txname)
+    tmp <- triebeard::longest_match(future::value(._EA_snv_tri) ,keys)
+    ind <- !is.na(tmp) #- these make PTCs
+
+    if(!is.null(txname)){
+        #- these make PTCs in a specific transcript
+        ind2     <- stringr::str_detect(tmp[ind], pattern = txname)
+        ind[ind] <- ind2
+    }
+
+    return(ind)
 }
 
 
