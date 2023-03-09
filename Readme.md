@@ -12,50 +12,71 @@ Currently, the repository contains three data packages:
 
 - `aenmd.data.gencode.v43.grch37` Protein-coding transcripts from [GENCODE version 43, mapped to GRCh37](https://www.gencodegenes.org/human/release_43lift37.html).
 
-***INSTALLATION***
+#### Installation
 
-Install packages by selecting the appropriate subdirectory from this `aenmd_data` directory.
+Install packages by selecting the appropriate subdirectory from this `aenmd_data` repository.
 
 ```R
 #- install ENSEMBL v105 transcripts on GRCh38
-#- use the remotes package to install
-> remotes::install_github(repo = "kostkalab/aenmd_data",
+remotes::install_github(repo = "kostkalab/aenmd_data",
                           subdir = "aenmd.data.ensdb.v105")
 
 #- install GENCODE v43 transcripts on GRCh38
-#- use the remotes package to install
-> remotes::install_github(repo = "kostkalab/aenmd_data",
+remotes::install_github(repo = "kostkalab/aenmd_data",
                           subdir = 'aenmd.data.gencode.v43')
 
 #- install GENCODE v43 transcripts on GRCh37
-#- use the remotes package to install
-> remotes::install_github(repo = "kostkalab/aenmd_data",
+remotes::install_github(repo = "kostkalab/aenmd_data",
                           subdir = 'aenmd.data.gencode.v43.grch37')
 
 ```
 
-***Annotating variants from GRCh37 or GRCh38 assemblies*** 
+####Annotating variants from GRCh37 or GRCh38 assemblies
 
 ```R
-> library(aenmd)
-> vars_grch38 <- 
-> vars_grch37 <- 
+library(aenmd)
 
-#- annotating variants from GRCh38
-> aenmd::ad_get_genome()
-> vars_grch38_annotated <- 
+#- load variants (two assemblies)
+vars_grch38 <- system.file('extdata/clinvar_20221211_noinfo_sample1k.vcf.gz', package = 'aenmd') |> 
+               aenmd:::parse_vcf_vcfR()
 
-#- annotating variants from GRCh37
-#- load GRCh37 transcripts
-> library(aenmd.data.gencode.v43.grch37)
-#- ask aenmd for the genome version we are using
-> ad_get_genome()
-#- change to GRCh37annotation
-> ad_change_annotation('aenmd.data.gencode.v43.grch37')
-#- ask aenmd for the genome version we are using
-> ad_get_genome()
-#- annotate variants using GRCh37 annotation
-> vars_grch37_annotated <- 
+vars_grch37 <- system.file('extdata/clinvar_grch37_20221211_noinfo_sample1k.vcf.gz', package = 'aenmd') |> 
+               aenmd:::parse_vcf_vcfR()
+
+#- ANALYZE GRCH38 VARIANTS
+#-------------------------
+
+#- per default we have
+ad_get_packagename()
+#[1] "aenmd.data.ensdb.v105"
+ad_get_genome()
+#[1] "GRCh38"
+
+vars_rng_38 <- process_variants(vars_grch38$vcf_rng)
+res_38      <- annotate_nmd(vars_rng_38)
+
+#- ANALYZE GRCH37 VARIANTS
+#-------------------------
+
+#- change to a GRCh37 annotation package
+ad_swap_annotation('aenmd.data.gencode.v43.grch37')
+
+ad_get_packagename()
+#[[1] "aenmd.data.gencode.v43.grch37"
+ad_get_genome()
+#[1] "GRCh37"
+
+#- process variants
+vars_rng_37 <- process_variants(vars_grch37$vcf_rng)
+
+#- filter out out variants where we don't know the alternative 100%
+n_N         <- Biostrings::alphabetFrequency(vars_rng_37$alt) [,-(1:4)] |> rowSums()
+ind_out     <- which(n_N > 0)
+vars_rng_37 <- vars_rng_37[-ind_out]
+
+#- finally, annotate on GRCH37
+res_37  <- annotate_nmd(vars_rng_37)
+
 ```
 
 ***Additional information***
