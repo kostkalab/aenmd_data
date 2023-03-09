@@ -6,7 +6,7 @@ PREFIX <- paste0(rprojroot::find_root("DESCRIPTION", path="."),"/inst/extdata/")
 
 
 datfiles <- c(  "env_gencode_v43_exns_byTx.rds",
-                "env_gencode_v43_sel.rds",
+                "env_gencode_v43_set.rds",
                 "env_gencode_v43_seqs_byTx.rds",
                 "gr_gencode_v43_spl-mask.rds",
                 "gr_gencode_v43_txs-mask.rds",
