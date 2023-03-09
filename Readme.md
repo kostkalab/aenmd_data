@@ -2,6 +2,13 @@
 
 ### Data packages for the `aenmd` R package
 
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Example](#annotating-variants-from-grch37-or-grch38-assemblies)
+- [Additional information](#additional-information)
+
+#### Introduction
+
 This repository contains R data packages for the `aenmd` package; `aenmd` annotates transcripts with variants that cause premature termination codons with regard to predicted escape nonsense-mediated decay (NMD). `aenmd` uses data objects derived from transcript models, and here we provide them for transcript sets for the GRCh37 and GRCh38 assemblies. This makes it straight-forward to use `aenmd` with variant annotations from either assembly.
 
 Currently, the repository contains three data packages:
@@ -31,7 +38,7 @@ remotes::install_github(repo = "kostkalab/aenmd_data",
 
 ```
 
-####Annotating variants from GRCh37 or GRCh38 assemblies
+#### Annotating variants from GRCh37 or GRCh38 assemblies
 
 ```R
 library(aenmd)
@@ -79,7 +86,7 @@ res_37  <- annotate_nmd(vars_rng_37)
 
 ```
 
-***Additional information***
+#### Additional information
 
 Each annotation package provide transcript information, which in turn is available via the `aenmd` package to the user. Typically the functions below are used by `aenmd` internally, but users can use them to get information about `aenmd`s transcript set, and about PTC-generating SNVs. 
 Below, transcripts  are identified by their GENCODE/ENSEMBL transcript ID, e.g. `txname <- ENSG00000187634.13`; SNVs are identified by their location and alleles, e.g. `snvname <- 10:000047074|C|A`. 
