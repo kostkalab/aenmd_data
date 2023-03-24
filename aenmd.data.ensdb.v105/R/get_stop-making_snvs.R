@@ -22,7 +22,7 @@ GenomeInfoDb::seqlevelsStyle(Hsapiens) <- 'NCBI'
 
 ._EA_exn_env <- readRDS("../inst/extdata/env_ensdb_v105_exns_byTx_fil.rds")
 ._EA_cds_env <- readRDS("../inst/extdata/env_ensdb_v105_seqs_byTx_fil.rds")
-._EA_txs_grl <- readRDS("../inst/extdata/grl_ensdb_v105_trnscrpts_fil.rds")
+._EA_txs_grl <- readRDS("../inst/extdata/grl_ensdb_v105_txs.rds")
 
 
 get_stop_making_snvs <- function(txname, verb = FALSE){

@@ -14,7 +14,6 @@ datfiles <- c(  "env_ensdb_v105_exns_byTx_fil.rds",
                 "env_ensdb_v105_setx_byTx_fil.rds",
                 "grl_ensdb_v105_splc_byTx_fil.rds",
                 "grl_ensdb_v105_exns_byTx_fil.rds",
-                "grl_ensdb_v105_trnscrpts_fil.rds",
                 "gr_ensdb_v105_txs.rds",
                 "gr_ensdb_v105_txs-mask.rds",
                 "gr_ensdb_v105_spl-mask.rds"
@@ -151,7 +150,7 @@ if(TRUE){
     saveRDS(set_env,      file = "../inst/extdata/env_ensdb_v105_setx_byTx_fil.rds")
     saveRDS(spl_rng_used, file = "../inst/extdata/grl_ensdb_v105_splc_byTx_fil.rds")
     saveRDS(exn_rng_used, file = "../inst/extdata/grl_ensdb_v105_exns_byTx_fil.rds")
-    saveRDS(txs_used,     file = "../inst/extdata/grl_ensdb_v105_trnscrpts_fil.rds")
+    saveRDS(txs_used,     file = "../inst/extdata/gr_ensdb_v105_txs.rds")
 }
 
 #- make the new >= 0.3.0 objects
@@ -160,8 +159,8 @@ if(TRUE){
 #- gr_ensdb_v105_txs.rds
 #- this is actually all we need
 #- make symbolic link
-R.utils::createLink(link = "../inst/extdata/gr_ensdb_v105_txs.rds", 
-                    target = "../inst/extdata/grl_ensdb_v105_trnscrpts_fil.rds")
+#R.utils::createLink(link = "../inst/extdata/gr_ensdb_v105_txs.rds", 
+#                    target = "../inst/extdata/grl_ensdb_v105_txs.rds")
 
 
 #- gr_ensdb_v105_txs-mask.rds

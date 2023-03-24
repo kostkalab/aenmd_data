@@ -1,7 +1,7 @@
 Package: aenmd.data.ensdb.v105
 Type: Package
 Title: Data package for the aenmd package, based on Ensembl version 105
-Version: 0.3.1
+Version: 0.3.2
 Author: Dennis Kostka
 Maintainer: Dennis Kostka <kostka@pitt.edu>
 Description: Annotation of genetic variants with predicted escape from nonsene mediated decay (NMD) is performed by the aenmd package. This package contains processed transcript information based on Ensembl version 105.

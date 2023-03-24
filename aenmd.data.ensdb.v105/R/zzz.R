@@ -30,7 +30,7 @@
     ._EA_set_env <<- future::future({readRDS(paste0(prefix,'/','env_ensdb_v105_setx_byTx_fil.rds'))}, lazy = TRUE)
     ._EA_spl_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_splc_byTx_fil.rds'))}, lazy = TRUE)
     ._EA_exn_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_exns_byTx_fil.rds'))}, lazy = TRUE)
-    ._EA_txs_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_trnscrpts_fil.rds'))}, lazy = TRUE)
+    ._EA_txs_grl <<- future::future({readRDS(paste0(prefix,'/','grl_ensdb_v105_txs.rds'))}, lazy = TRUE)
     ._EA_snv_tri <<- future::future({
         m_keys <- readRDS(paste0(prefix,'/','tri-keys_ensdb_v105_fil_all-stop-making-snvs.rds'))
         m_vals <- readRDS(paste0(prefix,'/','tri-vals_ensdb_v105_fil_all-stop-making-snvs.rds'))
