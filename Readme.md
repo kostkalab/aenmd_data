@@ -24,6 +24,11 @@ Currently, the repository contains three data packages:
 Install packages by selecting the appropriate subdirectory from this `aenmd_data` repository.
 
 ```R
+#- need the remotes package
+if(!require(remotes)){
+    install.packages("remotes")
+}
+
 #- install ENSEMBL v105 transcripts on GRCh38
 remotes::install_github(repo = "kostkalab/aenmd_data",
                           subdir = "aenmd.data.ensdb.v105")

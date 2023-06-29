@@ -19,7 +19,7 @@ Imports:
     here,
     pbapply,
     rprojroot,
-    S4Vectors,
+    S4Vectors (>= 0.34.0),
     stringi,
     stringr,
     triebeard
@@ -30,3 +30,11 @@ Suggests:
     rmarkdown,
     knitr
 VignetteBuilder: knitr
+Remotes:  
+    bioc::release/AnnotationFilter,
+    bioc::release/Biostrings,
+    bioc::release/BSgenome,
+    bioc::release/BSgenome.Hsapiens.NCBI.GRCh38,
+    bioc::release/GenomeInfoDb,
+    bioc::release/GenomicRanges,
+    bioc::release/S4Vectors
