@@ -8,6 +8,10 @@ Description: Annotation of genetic variants with predicted escape from nonsene m
 License: BSD_2_clause + file LICENSE
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 3.5.0)
+biocViews:
 Imports: 
     AnnotationFilter,
     Biostrings,
@@ -23,18 +27,7 @@ Imports:
     stringi,
     stringr,
     triebeard
-RoxygenNote: 7.2.3
-Depends: 
-    R (>= 3.5.0)
 Suggests: 
     rmarkdown,
     knitr
 VignetteBuilder: knitr
-Remotes:  
-    bioc::release/AnnotationFilter,
-    bioc::release/Biostrings,
-    bioc::release/BSgenome,
-    bioc::release/BSgenome.Hsapiens.NCBI.GRCh38,
-    bioc::release/GenomeInfoDb,
-    bioc::release/GenomicRanges,
-    bioc::release/S4Vectors
