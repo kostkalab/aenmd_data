@@ -1,0 +1,3 @@
+load("/Users/thienpham/Documents/GitHub/aenmd_data/aenmd.data.gencode.m33.grcm39/inst/extdata/gr_gencode_v43_spl-mask.rds")
+load("/Users/thienpham/Documents/GitHub/aenmd_data/aenmd.data.gencode.m33.grcm39/inst/extdata/env_gencode_v43_exns_byTx.rds")
+load("/Users/thienpham/Documents/GitHub/aenmd_data/aenmd.data.gencode.m33.grcm39/inst/extdata/gr_gencode_v43_txs.rds")
